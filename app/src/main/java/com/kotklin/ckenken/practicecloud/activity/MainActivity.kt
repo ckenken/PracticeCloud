@@ -29,15 +29,23 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
         Log.d("ckenken", "MainActivity onBackPressed, WaterFallFragment.TAG = ${supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG)}")
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         when {
-            supportFragmentManager.findFragmentByTag(DetailFragment.TAG) != null -> {
-                fragmentTransaction.remove(detailFragment!!)
-                    .show(waterFallFragment!!)
-                    .commitAllowingStateLoss()
+            detailFragment != null -> {
+                detailFragment?.let { detail ->
+                    waterFallFragment?.let { waterFall ->
+                        fragmentTransaction.remove(detail)
+                            .show(waterFall)
+                            .commitAllowingStateLoss()
+                    }
+                }
             }
-            supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG) != null -> {
-                fragmentTransaction.remove(waterFallFragment!!)
-                    .show(entryFragment!!)
-                    .commitAllowingStateLoss()
+            waterFallFragment != null -> {
+                waterFallFragment?.let { waterFall ->
+                    entryFragment?.let { entry ->
+                        fragmentTransaction.remove(waterFall)
+                            .show(entry)
+                            .commitAllowingStateLoss()
+                    }
+                }
             }
             else -> {
                 super.onBackPressed()
@@ -58,14 +66,18 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         when (currentPage) {
             Page.Entry -> {
-                fragmentTransaction.hide(entryFragment!!)
-                    .add(FRAGMENT_CONTAINER_ID, WaterFallFragment(), WaterFallFragment.TAG)
-                    .commitAllowingStateLoss()
+                entryFragment?.let {
+                    fragmentTransaction.hide(it)
+                        .add(FRAGMENT_CONTAINER_ID, WaterFallFragment(), WaterFallFragment.TAG)
+                        .commitAllowingStateLoss()
+                }
             }
             Page.Listing -> {
-                fragmentTransaction.hide(waterFallFragment!!)
-                    .add(FRAGMENT_CONTAINER_ID, DetailFragment(), DetailFragment.TAG)
-                    .commitAllowingStateLoss()
+                waterFallFragment?.let {
+                    fragmentTransaction.hide(it)
+                        .add(FRAGMENT_CONTAINER_ID, DetailFragment(), DetailFragment.TAG)
+                        .commitAllowingStateLoss()
+                }
             }
         }
     }
