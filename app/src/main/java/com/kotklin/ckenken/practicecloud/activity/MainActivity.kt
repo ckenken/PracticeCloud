@@ -56,16 +56,14 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
 
     override fun forward(currentPage: Page) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val entry = supportFragmentManager.findFragmentByTag(EntryFragment.TAG)
-        val waterfall = supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG)
         when (currentPage) {
             Page.Entry -> {
-                fragmentTransaction.hide(entry!!)
+                fragmentTransaction.hide(entryFragment!!)
                     .add(FRAGMENT_CONTAINER_ID, WaterFallFragment(), WaterFallFragment.TAG)
                     .commitAllowingStateLoss()
             }
             Page.Listing -> {
-                fragmentTransaction.hide(waterfall!!)
+                fragmentTransaction.hide(waterFallFragment!!)
                     .add(FRAGMENT_CONTAINER_ID, DetailFragment(), DetailFragment.TAG)
                     .commitAllowingStateLoss()
             }
@@ -74,5 +72,5 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
 }
 
 interface CloudActivityInterface {
-    fun forward(targetPage : MainActivity.Page)
+    fun forward(currentPage : MainActivity.Page)
 }

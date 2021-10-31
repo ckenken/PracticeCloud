@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.kotklin.ckenken.practicecloud.R
+import com.kotklin.ckenken.practicecloud.activity.CloudActivityInterface
+import com.kotklin.ckenken.practicecloud.activity.MainActivity
 
 class WaterFallFragment : Fragment() {
 
@@ -13,7 +16,15 @@ class WaterFallFragment : Fragment() {
         const val TAG = "WaterFallFragment"
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_listing, container, false)
+    lateinit var rootView: View
+    private val inter by lazy { activity as CloudActivityInterface }
+    private val gogogo by lazy { rootView.findViewById<Button>(R.id.gogogo) }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        rootView = inflater.inflate(R.layout.fragment_listing, container, false)
+        gogogo.setOnClickListener {
+            inter.forward(MainActivity.Page.Listing)
+        }
+        return rootView
     }
 }
