@@ -17,9 +17,12 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
         const val FRAGMENT_CONTAINER_ID = R.id.entryFragmentContainer
     }
 
-    private val entryFragment by lazy { EntryFragment() }
-    private val waterFallFragment by lazy { WaterFallFragment() }
-    private val detailFragment by lazy { DetailFragment() }
+    private val entryFragment
+        get() = supportFragmentManager.findFragmentByTag(EntryFragment.TAG)
+    private val waterFallFragment
+        get() = supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG)
+    private val detailFragment
+        get() = supportFragmentManager.findFragmentByTag(DetailFragment.TAG)
 
     override fun onBackPressed() {
         Log.d("ckenken", "MainActivity onBackPressed, DetailFragment.TAG = ${supportFragmentManager.findFragmentByTag(DetailFragment.TAG)}")
@@ -27,11 +30,13 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         when {
             supportFragmentManager.findFragmentByTag(DetailFragment.TAG) != null -> {
-                fragmentTransaction.remove(detailFragment)
+                fragmentTransaction.remove(detailFragment!!)
+                    .show(waterFallFragment!!)
                     .commitAllowingStateLoss()
             }
             supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG) != null -> {
-                fragmentTransaction.remove(waterFallFragment)
+                fragmentTransaction.remove(waterFallFragment!!)
+                    .show(entryFragment!!)
                     .commitAllowingStateLoss()
             }
             else -> {
@@ -51,15 +56,17 @@ class MainActivity : AppCompatActivity(), CloudActivityInterface {
 
     override fun forward(currentPage: Page) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val entry = supportFragmentManager.findFragmentByTag(EntryFragment.TAG)
+        val waterfall = supportFragmentManager.findFragmentByTag(WaterFallFragment.TAG)
         when (currentPage) {
             Page.Entry -> {
-                fragmentTransaction.hide(entryFragment)
-                    .add(FRAGMENT_CONTAINER_ID, waterFallFragment, WaterFallFragment.TAG)
+                fragmentTransaction.hide(entry!!)
+                    .add(FRAGMENT_CONTAINER_ID, WaterFallFragment(), WaterFallFragment.TAG)
                     .commitAllowingStateLoss()
             }
             Page.Listing -> {
-                fragmentTransaction.hide(waterFallFragment)
-                    .add(FRAGMENT_CONTAINER_ID, detailFragment, DetailFragment.TAG)
+                fragmentTransaction.hide(waterfall!!)
+                    .add(FRAGMENT_CONTAINER_ID, DetailFragment(), DetailFragment.TAG)
                     .commitAllowingStateLoss()
             }
         }
