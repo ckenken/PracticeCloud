@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PracticeCloud</string>
+    <string name="develop_name">Kenneth Kuo</string>
+    <string name="entry_button_name">Request API</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
